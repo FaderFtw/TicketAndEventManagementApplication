@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: event-microservice # Name for identification in Eureka
+  cloud:
+    config:
+      uri: http://config-server:8888
+      fail-fast: true
+      import: "configserver:"
+      import-check:
+        enabled: true
+  datasource:
+    url: jdbc:mysql://event-db:3306/event_db
+    username: root
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MariaDBDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka # Eureka Server URL
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    endpoint: http://zipkin:9411/api/v2/spans # Zipkin Server URL
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
