@@ -29,12 +29,16 @@ management:
   endpoints:
     web:
       exposure:
-        include: info, health
+        include: "*"
   tracing:
     sampling:
       probability: 1.0
+  metrics:
+    export:
+      prometheus:
+        enabled: true
   zipkin:
-    endpoint: http://zipkin:9411/api/v2/spans
+    endpoint: http://zipkin:9411/api/v2/spans # Zipkin Server URL
 
 logging:
   level:
