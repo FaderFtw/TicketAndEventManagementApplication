@@ -1,5 +1,7 @@
 package tn.univ.eventmicroservice.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ import java.util.Optional;
 
 @Service
 public class EvenementService {
+
+    private static final Logger logger = LoggerFactory.getLogger(EvenementService.class);
 
     @Autowired
     private EvenementRepository evenementRepository;
@@ -32,15 +36,37 @@ public class EvenementService {
         return evenementRepository.findById(id);
     }
 
+    public Evenement updateEvenement(Long id, Evenement updatedEvent) {
+        Optional<Evenement> existingEvent = evenementRepository.findById(id);
+        if (existingEvent.isEmpty()) {
+            throw new IllegalArgumentException("Event with ID " + id + " not found.");
+        }
+        updatedEvent.setIdEvenement(id);
+        return evenementRepository.save(updatedEvent);
+    }
+
+    public void deleteEvenement(Long id) {
+        if (!evenementRepository.existsById(id)) {
+            throw new IllegalArgumentException("Event with ID " + id + " not found.");
+        }
+        evenementRepository.deleteById(id);
+    }
+
     @Scheduled(fixedRate = 15000)
     public void listeEvenementsParCategorie() {
         List<Categorie> categories = categorieRepository.findAll();
+        if (categories.isEmpty()) {
+            logger.info("Aucune catégorie trouvée.");
+            return;
+        }
+
         for (Categorie categorie : categories) {
-            System.out.println("Categorie " + categorie.getNomCategorie() + ":");
+            logger.info("Categorie: {}", categorie.getNomCategorie());
             for (Evenement evenement : categorie.getEvenements()) {
-                System.out.println("Evenement " + evenement.getNomEvenement() + " planifié le " + evenement.getDateEvenement());
+                logger.info("Evenement: {} planifié le {}",
+                        evenement.getNomEvenement(),
+                        evenement.getDateEvenement());
             }
         }
     }
-
 }

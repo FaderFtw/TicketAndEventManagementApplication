@@ -10,7 +10,7 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idTicket;
 
     private String codeTicket;
     private double prixTicket;
@@ -22,6 +22,5 @@ public class Ticket {
     @JoinColumn(name = "evenement_id")
     private Evenement evenement;
 
-    // Store internautId as a plain attribute to maintain a foreign key reference
-    private Long internautId; // Reference to the Internaut Microservice
+    private Long internautId;
 }

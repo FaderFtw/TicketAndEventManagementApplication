@@ -1,5 +1,6 @@
 package tn.univ.eventmicroservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,7 +19,8 @@ public class Evenement {
     private int nbPlacesRestantes;
     private LocalDate dateEvenement;
 
-    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Ticket> tickets;
 
     @ManyToMany

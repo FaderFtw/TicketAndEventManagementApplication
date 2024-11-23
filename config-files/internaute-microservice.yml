@@ -40,3 +40,16 @@ logging:
   level:
     root: INFO
     org.springframework.web: DEBUG
+
+resilience4j:
+  retry:
+    instances:
+      myRetry:
+        max-attempts: 3 # Maximum number of retry attempts
+        wait-duration: 500ms # Wait time between retries
+  rate-limiter:
+    instances:
+      myRateLimiter:
+        limit-for-period: 5 # Maximum 5 requests per period
+        limit-refresh-period: 1s # Refresh period for rate limiter
+        timeout-duration: 500ms # Timeout duration for rate-limited requests
